@@ -19,8 +19,7 @@ galaxy_info:
     versions:
       - 23
   galaxy_tags:
-    - 'authorized_key'
-    - 'authorized_keys'
+    - 'authorized'
+    - 'key'
+    - 'keys'
     - 'ssh'
-    - 'ssh_key'
-    - 'ssh_keys'
