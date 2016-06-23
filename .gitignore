@@ -1,0 +1,9 @@
+# intellij idea project files
+*.iml
+.idea
+
+# ansible test run retry files
+*.retry
+
+# dependency roles for tests
+tests/roles/provision_docker

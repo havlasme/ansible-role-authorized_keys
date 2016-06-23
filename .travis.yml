@@ -1,0 +1,30 @@
+---
+language: python
+python: "2.7"
+
+sudo: required
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+    - python-pip
+    - sshpass
+
+before_install:
+  - deactivate
+  - sudo apt-get update -qq
+  - sudo apt-get -o Dpkg::Options::="--force-confnew" -y install docker-engine
+
+install:
+  - sudo pip install docker-py
+  - sudo pip install ansible
+  - ansible --version
+  - ansible-galaxy install -r tests/requirements.yml -p tests/roles/
+
+script:
+  - cd tests && make
+
+notifications:
+    webhooks: https://galaxy.ansible.com/api/v1/notifications/

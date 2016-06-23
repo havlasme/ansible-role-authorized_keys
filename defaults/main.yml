@@ -1,0 +1,23 @@
+---
+# list of authorized keys specifications
+authorized_keys__list: []
+## authorized key
+#  - key: string
+## user of authorized key
+#    user: string
+## OPTIONAL: should be authorized key exclusive
+#    exclusive: boolean
+## OPTIONAL: ssh key options
+#    key_options: string
+## OPTIONAL: should directory containing authorized_keys file be managed by ansible
+#    manage_dir: boolean
+## OPTIONAL: path for authorized_keys file
+#    path: string
+## OPTIONAL: if set to True, authorized key is removed
+#    disabled: boolean
+
+# default value for exclusive option of authrozied keys
+authorized_keys__exclusive: 'no'
+
+# default value for manage_dir option of authorized keys
+authorized_keys__manage_dir: 'yes'
