@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Updated minimal Ansible version to `2.0`.
+  [tomashavlas]
+
 v1.0
 ----
 

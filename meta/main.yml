@@ -6,7 +6,7 @@ galaxy_info:
   company: 'Raven Systems'
   issue_tracker_url: 'https://github.com/tomashavlas/ansible-role-authorized_keys/issues'
   license: 'BSD'
-  min_ansible_version: 1.7
+  min_ansible_version: 2.0
   github_branch: 'master'
   platforms:
   - name: Debian
