@@ -1,14 +1,14 @@
 ---
-- name: Initialize test docker containers
+- name: Pre-Test Scenario 1.0 - initialize test docker containers
   hosts: localhost
   roles:
     - role: 'provision_docker'
       provision_docker__inventory:
-        - name: 'test_authorized_keys_main_centos7'
+        - name: 'test_authorized_keys_t1_centos7'
           image: 'tomashavlas/ansible-test:centos7'
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-        - name: 'test_authorized_keys_main_debian8'
+        - name: 'test_authorized_keys_t1_debian8'
           image: 'tomashavlas/ansible-test:debian8'
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
@@ -22,68 +22,68 @@
       with_items: '{{ provision_docker__inventory }}'
   tags: [ 'initialize-docker' ]
 
-- name: Test 1 - basic test scenario
+- name: Test Scenario 1.1 - basic functionality
   hosts: provision_docker__containers
   remote_user: 'root'
   vars:
-    t1_authorized_keys:
+    s1_authorized_keys:
       - '{{ lookup("file", "files/public_keys/test_id_rsa1.pub") }}'
       - '{{ lookup("file", "files/public_keys/test_id_rsa2.pub") }}'
       - '{{ lookup("file", "files/public_keys/test_id_ecdsa.pub") }}'
       - '{{ lookup("file", "files/public_keys/test_id_ed25519.pub") }}'
-    t1_global_authorized_keys: '/etc/ssh/authorized_keys'
-    t1_users:
-      - 't1_user1'
-      - 't1_user2'
-      - 't1_user3'
-      - 't1_user4'
-      - 't1_user5'
-      - 't1_user6'
-      - 't1_exclusive'
-      - 't1_removeme'
+    s1_global_authorized_keys_file: '/etc/ssh/authorized_keys'
+    s1_users:
+      - 's1_user1'
+      - 's1_user2'
+      - 's1_user3'
+      - 's1_user4'
+      - 's1_user5'
+      - 's1_user6'
+      - 's1_exclusive'
+      - 's1_removeme'
   pre_tasks:
-    - name: Pre-Test - create sample test users
+    - name: Pre-Test - create test users
       user:
         name: '{{ item }}'
         createhome: 'yes'
         state: 'present'
       with_items:
-        - '{{ t1_users }}'
+        - '{{ s1_users }}'
       changed_when: False
       tags: [ 'pre-test' ]
     - name: Pre-Test - create "remove me" authorized key
       authorized_key:
-        key: '{{ t1_authorized_keys[0] }}'
-        user: 't1_exclusive'
+        key: '{{ s1_authorized_keys[0] }}'
+        user: 's1_exclusive'
       changed_when: False
       tags: [ 'pre-test' ]
     - name: Pre-Test - create "remove me" authorized key
       authorized_key:
         key: |
-          {{ t1_authorized_keys[0] }}
-          {{ t1_authorized_keys[1] }}
-        user: 't1_removeme'
+          {{ s1_authorized_keys[0] }}
+          {{ s1_authorized_keys[1] }}
+        user: 's1_removeme'
       changed_when: False
       tags: [ 'pre-test' ]
   post_tasks:
     - name: Acceptance Test - verify authorized_keys created by role
       copy:
         dest: '~{{ item }}/.ssh/authorized_keys'
-        src: 'files/acceptance-tests/t1/authorized_keys/{{ item }}'
+        src: 'files/acceptance_tests/t1/{{ item }}'
       with_items:
-        - 't1_user1'
-        - 't1_user2'
-        - 't1_user3'
-        - 't1_user4'
-        - 't1_user5'
-        - 't1_exclusive'
-        - 't1_removeme'
+        - 's1_user1'
+        - 's1_user2'
+        - 's1_user3'
+        - 's1_user4'
+        - 's1_user5'
+        - 's1_exclusive'
+        - 's1_removeme'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Acceptance Test - verify authorized_keys not supposed to be created by role
       file:
-        path: '~t1_user6/.ssh/authorized_keys'
+        path: '~s1_user6/.ssh/authorized_keys'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
@@ -94,18 +94,18 @@
         mode: '0700'
         state: 'directory'
       with_items:
-        - 't1_user1'
-        - 't1_user3'
-        - 't1_user4'
-        - 't1_user5'
-        - 't1_exclusive'
-        - 't1_removeme'
+        - 's1_user1'
+        - 's1_user3'
+        - 's1_user4'
+        - 's1_user5'
+        - 's1_exclusive'
+        - 's1_removeme'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Acceptance Test - verify mode of directories not supposed to be managed by role
       file:
-        path: '~t1_user2/.ssh'
+        path: '~s1_user2/.ssh'
         mode: '0755'
         state: 'directory'
       register: 'test_result'
@@ -113,8 +113,8 @@
       tags: [ 'acceptance-test' ]
     - name: Acceptance Test - verify authorized_keys created by role at different location
       copy:
-        dest: '{{ t1_global_authorized_keys }}'
-        src: 'files/acceptance-tests/t1/authorized_keys/global_authorized_keys'
+        dest: '{{ s1_global_authorized_keys_file }}'
+        src: 'files/acceptance_tests/t1/s1_global_authorized_keys'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
@@ -122,93 +122,86 @@
     - role: 'authorized_keys'
       authorized_keys__list:
 # test simple authorized ssh key
-        - key: '{{ t1_authorized_keys[0] }}'
-          user: 't1_user1'
-
+        - key: '{{ s1_authorized_keys[0] }}'
+          user: 's1_user1'
 # test advanced authorized ssh key
-        - key: '{{ t1_authorized_keys[1] }}'
-          user: 't1_user2'
+        - key: '{{ s1_authorized_keys[1] }}'
+          user: 's1_user2'
           key_options: 'no-port-forwarding,from="10.0.1.1"'
           manage_dir: 'no'
-
 # test multiple authorized ssh keys
-        - key: '{{ t1_authorized_keys[0] }}'
-          user: 't1_user3'
-        - key: '{{ t1_authorized_keys[1] }}'
-          user: 't1_user3'
-        - key: '{{ t1_authorized_keys[2] }}'
-          user: 't1_user3'
-        - key: '{{ t1_authorized_keys[3] }}'
-          user: 't1_user3'
-
+        - key: '{{ s1_authorized_keys[0] }}'
+          user: 's1_user3'
+        - key: '{{ s1_authorized_keys[1] }}'
+          user: 's1_user3'
+        - key: '{{ s1_authorized_keys[2] }}'
+          user: 's1_user3'
+        - key: '{{ s1_authorized_keys[3] }}'
+          user: 's1_user3'
 # test multiple authorized ssh keys in single entry
         - key: |
-            {{ t1_authorized_keys[0] }}
-            {{ t1_authorized_keys[1] }}
-            {{ t1_authorized_keys[2] }}
-            {{ t1_authorized_keys[3] }}
-          user: 't1_user4'
-
+            {{ s1_authorized_keys[0] }}
+            {{ s1_authorized_keys[1] }}
+            {{ s1_authorized_keys[2] }}
+            {{ s1_authorized_keys[3] }}
+          user: 's1_user4'
 # test not disabled authorized ssh key
-        - key: '{{ t1_authorized_keys[0] }}'
-          user: 't1_user5'
+        - key: '{{ s1_authorized_keys[0] }}'
+          user: 's1_user5'
           disabled: False
-
 # test disabled authorized ssh keys
-        - key: '{{ t1_authorized_keys[0] }}'
-          user: 't1_user6'
+        - key: '{{ s1_authorized_keys[0] }}'
+          user: 's1_user6'
           disabled: True
-        - key: '{{ t1_authorized_keys[0] }}'
-          user: 't1_removeme'
+        - key: '{{ s1_authorized_keys[0] }}'
+          user: 's1_removeme'
           disabled: True
-
 # test exclusive authorized ssh key
-        - key: '{{ t1_authorized_keys[1] }}'
-          user: 't1_exclusive'
+        - key: '{{ s1_authorized_keys[1] }}'
+          user: 's1_exclusive'
           exclusive: 'yes'
-
 # test different file location
-        - key: '{{ t1_authorized_keys[0] }}'
+        - key: '{{ s1_authorized_keys[0] }}'
           user: 'root'
           manage_dir: 'no'
-          path: '{{ t1_global_authorized_keys }}'
+          path: '{{ s1_global_authorized_keys_file }}'
 
-- name: Test 2 - all keys are exclusive by default and directories are not managed by role by default
+- name: Test Scenario 1.2 - all keys are exclusive by default and directories are not managed by role by default
   hosts: provision_docker__containers
   remote_user: 'root'
   vars:
-    t2_authorized_keys:
+    s2_authorized_keys:
       - '{{ lookup("file", "files/public_keys/test_id_rsa1.pub") }}'
       - '{{ lookup("file", "files/public_keys/test_id_rsa2.pub") }}'
-    t2_users:
-      - 't2_user1'
-      - 't2_user2'
-      - 't2_user3'
-      - 't2_noexclusive'
-      - 't2_removeme'
+    s2_users:
+      - 's2_user1'
+      - 's2_user2'
+      - 's2_user3'
+      - 's2_nonexclusive'
+      - 's2_removeme'
   pre_tasks:
-    - name: Pre-Test - create sample test users
+    - name: Pre-Test - create test users
       user:
         name: '{{ item }}'
         createhome: 'yes'
         state: 'present'
       with_items:
-        - '{{ t2_users }}'
+        - '{{ s2_users }}'
       changed_when: False
       tags: [ 'pre-test' ]
-    - name: Pre-Test - create "remove me" authorized key
+    - name: Pre-Test - create "do not remove me" authorized key
       authorized_key:
-        key: '{{ t2_authorized_keys[0] }}'
-        user: 't2_noexclusive'
+        key: '{{ s2_authorized_keys[0] }}'
+        user: 's2_nonexclusive'
         manage_dir: 'no'
       changed_when: False
       tags: [ 'pre-test' ]
     - name: Pre-Test - create "remove me" authorized key
       authorized_key:
         key: |
-          {{ t2_authorized_keys[0] }}
-          {{ t2_authorized_keys[1] }}
-        user: 't2_removeme'
+          {{ s2_authorized_keys[0] }}
+          {{ s2_authorized_keys[1] }}
+        user: 's2_removeme'
         manage_dir: 'no'
       changed_when: False
       tags: [ 'pre-test' ]
@@ -216,19 +209,19 @@
     - name: Acceptance Test - verify authorized_keys created by role
       copy:
         dest: '~{{ item }}/.ssh/authorized_keys'
-        src: 'files/acceptance-tests/t2/authorized_keys/{{ item }}'
+        src: 'files/acceptance_tests/t1/{{ item }}'
       with_items:
-        - 't2_user1'
-        - 't2_user2'
-        - 't2_user3'
-        - 't2_noexclusive'
-        - 't2_removeme'
+        - 's2_user1'
+        - 's2_user2'
+        - 's2_user3'
+        - 's2_nonexclusive'
+        - 's2_removeme'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
     - name: Acceptance Test - verify mode of directories managed by role
       file:
-        path: '~t2_user3/.ssh'
+        path: '~s2_user3/.ssh'
         mode: '0700'
         state: 'directory'
       register: 'test_result'
@@ -240,10 +233,10 @@
         mode: '0755'
         state: 'directory'
       with_items:
-        - 't2_user1'
-        - 't2_user2'
-        - 't2_noexclusive'
-        - 't2_removeme'
+        - 's2_user1'
+        - 's2_user2'
+        - 's2_nonexclusive'
+        - 's2_removeme'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
@@ -253,25 +246,21 @@
       authorized_keys__manage_dir: 'no'
       authorized_keys__list:
 # test simple authorized ssh key
-        - key: '{{ t2_authorized_keys[0] }}'
-          user: 't2_user1'
-
+        - key: '{{ s2_authorized_keys[0] }}'
+          user: 's2_user1'
 # test multiple authorized ssh keys in single entry
         - key: |
-            {{ t2_authorized_keys[0] }}
-            {{ t2_authorized_keys[1] }}
-          user: 't2_user2'
-
+            {{ s2_authorized_keys[0] }}
+            {{ s2_authorized_keys[1] }}
+          user: 's2_user2'
 # test existing authorized ssh keys
-        - key: '{{ t2_authorized_keys[0] }}'
-          user: 't2_removeme'
-
+        - key: '{{ s2_authorized_keys[0] }}'
+          user: 's2_removeme'
 # test non-exclusive authorized ssh key
-        - key: '{{ t2_authorized_keys[1] }}'
-          user: 't2_noexclusive'
+        - key: '{{ s2_authorized_keys[1] }}'
+          user: 's2_nonexclusive'
           exclusive: 'no'
-
 # test managed directory
-        - key: '{{ t2_authorized_keys[0] }}'
-          user: 't2_user3'
+        - key: '{{ s2_authorized_keys[0] }}'
+          user: 's2_user3'
           manage_dir: 'yes'

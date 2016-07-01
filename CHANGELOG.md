@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Refactored tests.
+  [tomashavlas]
+
 v1.1
 ----
 
