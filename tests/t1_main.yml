@@ -1,5 +1,5 @@
 ---
-- name: Pre-Test Scenario 1.0 - initialize test docker containers
+- name: Pre-Test Scenario 1.0 - initialize Docker containers
   hosts: localhost
   roles:
     - role: 'provision_docker'
