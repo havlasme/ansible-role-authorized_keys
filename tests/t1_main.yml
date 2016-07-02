@@ -1,5 +1,5 @@
 ---
-- name: Pre-Test Scenario 1.0 - initialize Docker containers
+- name: Pre-Test Scenario 1.0 - Initialize Docker containers
   hosts: localhost
   roles:
     - role: 'provision_docker'
@@ -13,7 +13,7 @@
           volumes:
             - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
   post_tasks:
-    - name: Wait for SSH connection to docker containers
+    - name: Wait for SSH connection to Docker containers
       wait_for:
         host: '{{ hostvars[item.name]["ansible_ssh_host"] }}'
         port: 22
@@ -22,7 +22,7 @@
       with_items: '{{ provision_docker__inventory }}'
   tags: [ 'initialize-docker' ]
 
-- name: Test Scenario 1.1 - basic functionality
+- name: Test Scenario 1.1 - Basic role functionality
   hosts: provision_docker__containers
   remote_user: 'root'
   vars:
@@ -42,7 +42,7 @@
       - 's1_exclusive'
       - 's1_removeme'
   pre_tasks:
-    - name: Pre-Test - create test users
+    - name: Pre-Test - Create test users
       user:
         name: '{{ item }}'
         createhome: 'yes'
@@ -51,13 +51,13 @@
         - '{{ s1_users }}'
       changed_when: False
       tags: [ 'pre-test' ]
-    - name: Pre-Test - create "remove me" authorized key
+    - name: Pre-Test - Create "remove me" authorized key
       authorized_key:
         key: '{{ s1_authorized_keys[0] }}'
         user: 's1_exclusive'
       changed_when: False
       tags: [ 'pre-test' ]
-    - name: Pre-Test - create "remove me" authorized key
+    - name: Pre-Test - Create "remove me" authorized key
       authorized_key:
         key: |
           {{ s1_authorized_keys[0] }}
@@ -66,7 +66,7 @@
       changed_when: False
       tags: [ 'pre-test' ]
   post_tasks:
-    - name: Acceptance Test - verify authorized_keys created by role
+    - name: Acceptance Test - Verify authorized_keys created by role
       copy:
         dest: '~{{ item }}/.ssh/authorized_keys'
         src: 'files/acceptance_tests/t1/{{ item }}'
@@ -81,14 +81,14 @@
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - verify authorized_keys not supposed to be created by role
+    - name: Acceptance Test - Verify authorized_keys not supposed to be created by role
       file:
         path: '~s1_user6/.ssh/authorized_keys'
         state: 'absent'
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - verify mode of directories managed by role
+    - name: Acceptance Test - Verify mode of directories managed by role
       file:
         path: '~{{ item }}/.ssh'
         mode: '0700'
@@ -103,7 +103,7 @@
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - verify mode of directories not supposed to be managed by role
+    - name: Acceptance Test - Verify mode of directories not supposed to be managed by role
       file:
         path: '~s1_user2/.ssh'
         mode: '0755'
@@ -111,7 +111,7 @@
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - verify authorized_keys created by role at different location
+    - name: Acceptance Test - Verify authorized_keys created by role at different location
       copy:
         dest: '{{ s1_global_authorized_keys_file }}'
         src: 'files/acceptance_tests/t1/s1_global_authorized_keys'
@@ -166,7 +166,7 @@
           manage_dir: 'no'
           path: '{{ s1_global_authorized_keys_file }}'
 
-- name: Test Scenario 1.2 - all keys are exclusive by default and directories are not managed by role by default
+- name: Test Scenario 1.2 - Keys are exclusive by default and directories are not managed by default
   hosts: provision_docker__containers
   remote_user: 'root'
   vars:
@@ -180,7 +180,7 @@
       - 's2_nonexclusive'
       - 's2_removeme'
   pre_tasks:
-    - name: Pre-Test - create test users
+    - name: Pre-Test - Create test users
       user:
         name: '{{ item }}'
         createhome: 'yes'
@@ -189,14 +189,14 @@
         - '{{ s2_users }}'
       changed_when: False
       tags: [ 'pre-test' ]
-    - name: Pre-Test - create "do not remove me" authorized key
+    - name: Pre-Test - Create "do not remove me" authorized key
       authorized_key:
         key: '{{ s2_authorized_keys[0] }}'
         user: 's2_nonexclusive'
         manage_dir: 'no'
       changed_when: False
       tags: [ 'pre-test' ]
-    - name: Pre-Test - create "remove me" authorized key
+    - name: Pre-Test - Create "remove me" authorized key
       authorized_key:
         key: |
           {{ s2_authorized_keys[0] }}
@@ -206,7 +206,7 @@
       changed_when: False
       tags: [ 'pre-test' ]
   post_tasks:
-    - name: Acceptance Test - verify authorized_keys created by role
+    - name: Acceptance Test - Verify authorized_keys created by role
       copy:
         dest: '~{{ item }}/.ssh/authorized_keys'
         src: 'files/acceptance_tests/t1/{{ item }}'
@@ -219,7 +219,7 @@
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - verify mode of directories managed by role
+    - name: Acceptance Test - Verify mode of directories managed by role
       file:
         path: '~s2_user3/.ssh'
         mode: '0700'
@@ -227,7 +227,7 @@
       register: 'test_result'
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
-    - name: Acceptance Test - verify mode of directories not supposed to be managed by role
+    - name: Acceptance Test - Verify mode of directories not supposed to be managed by role
       file:
         path: '~{{ item }}/.ssh'
         mode: '0755'

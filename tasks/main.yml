@@ -1,5 +1,5 @@
 ---
-- name: Manage authorized ssh keys
+- name: Configure - Manage SSH authorized_keys
   authorized_key:
     key: '{{ item.key }}'
     user: '{{ item.user }}'
