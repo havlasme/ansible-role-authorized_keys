@@ -12,3 +12,4 @@
     - '{{ authorized_keys__list }}'
   when: ((item.key is defined and item.key|trim) and
          (item.user is defined and item.user|trim))
+  tags: [ 'configure' ]
