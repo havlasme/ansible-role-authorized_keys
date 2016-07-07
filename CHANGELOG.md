@@ -1,8 +1,10 @@
 Changelog
 =========
 
-Unreleased
-----------
+v1.2
+----
+
+*Released: 2016-07-08*
 
 - Refactored tests.
   [tomashavlas]
