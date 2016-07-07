@@ -17,7 +17,7 @@ authorized_keys__list: []
 #    disabled: boolean
 
 # default value for exclusive option of authrozied keys
-authorized_keys__exclusive: 'no'
+authorized_keys__exclusive: false
 
 # default value for manage_dir option of authorized keys
-authorized_keys__manage_dir: 'yes'
+authorized_keys__manage_dir: true

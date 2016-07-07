@@ -45,7 +45,7 @@
     - name: Pre-Test - Create test users
       user:
         name: '{{ item }}'
-        createhome: 'yes'
+        createhome: true
         state: 'present'
       with_items:
         - '{{ s1_users }}'
@@ -128,7 +128,7 @@
         - key: '{{ s1_authorized_keys[1] }}'
           user: 's1_user2'
           key_options: 'no-port-forwarding,from="10.0.1.1"'
-          manage_dir: 'no'
+          manage_dir: false
 # test multiple authorized ssh keys
         - key: '{{ s1_authorized_keys[0] }}'
           user: 's1_user3'
@@ -159,11 +159,11 @@
 # test exclusive authorized ssh key
         - key: '{{ s1_authorized_keys[1] }}'
           user: 's1_exclusive'
-          exclusive: 'yes'
+          exclusive: true
 # test different file location
         - key: '{{ s1_authorized_keys[0] }}'
           user: 'root'
-          manage_dir: 'no'
+          manage_dir: false
           path: '{{ s1_global_authorized_keys_file }}'
 
 - name: Test Scenario 1.2 - Keys are exclusive by default and directories are not managed by default
@@ -183,7 +183,7 @@
     - name: Pre-Test - Create test users
       user:
         name: '{{ item }}'
-        createhome: 'yes'
+        createhome: true
         state: 'present'
       with_items:
         - '{{ s2_users }}'
@@ -193,7 +193,7 @@
       authorized_key:
         key: '{{ s2_authorized_keys[0] }}'
         user: 's2_nonexclusive'
-        manage_dir: 'no'
+        manage_dir: false
       changed_when: False
       tags: [ 'pre-test' ]
     - name: Pre-Test - Create "remove me" authorized key
@@ -202,7 +202,7 @@
           {{ s2_authorized_keys[0] }}
           {{ s2_authorized_keys[1] }}
         user: 's2_removeme'
-        manage_dir: 'no'
+        manage_dir: false
       changed_when: False
       tags: [ 'pre-test' ]
   post_tasks:
@@ -242,8 +242,8 @@
       tags: [ 'acceptance-test' ]
   roles:
     - role: 'authorized_keys'
-      authorized_keys__exclusive: 'yes'
-      authorized_keys__manage_dir: 'no'
+      authorized_keys__exclusive: true
+      authorized_keys__manage_dir: false
       authorized_keys__list:
 # test simple authorized ssh key
         - key: '{{ s2_authorized_keys[0] }}'
@@ -259,8 +259,8 @@
 # test non-exclusive authorized ssh key
         - key: '{{ s2_authorized_keys[1] }}'
           user: 's2_nonexclusive'
-          exclusive: 'no'
+          exclusive: false
 # test managed directory
         - key: '{{ s2_authorized_keys[0] }}'
           user: 's2_user3'
-          manage_dir: 'yes'
+          manage_dir: true
