@@ -13,7 +13,7 @@ authorized_keys__list: []
 #    manage_dir: boolean
 ## OPTIONAL: path for authorized_keys file
 #    path: string
-## OPTIONAL: if set to True, authorized key is removed
+## OPTIONAL: if set to true, authorized key is removed
 #    disabled: boolean
 
 # default value for exclusive option of authrozied keys

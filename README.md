@@ -30,14 +30,14 @@ authorized_keys__list: []
 #    manage_dir: boolean
 ## OPTIONAL: path for authorized_keys file
 #    path: string
-## OPTIONAL: if set to True, authorized key is removed
+## OPTIONAL: if set to true, authorized key is removed
 #    disabled: boolean
 
 # default value for exclusive option of authrozied keys
-authorized_keys__exclusive: 'no'
+authorized_keys__exclusive: false
 
 # default value for manage_dir option of authorized keys
-authorized_keys__manage_dir: 'yes'
+authorized_keys__manage_dir: true
 ```
 
 Dependencies
@@ -55,7 +55,7 @@ Example Playbook
       authorized_keys__list:
         - key: '{{ lookup("file", "files/public_keys/root/id_rsa.pub" }}'
           user: 'root'
-          exclusive: 'yes'
+          exclusive: true
         - key: |
             {{ lookup("file", "files/public_keys/example/id_rsa.pub" }}
             {{ lookup("file", "files/public_keys/example/id_ed25519.pub" }}
