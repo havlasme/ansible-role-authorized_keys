@@ -2,7 +2,7 @@
 - name: Pre-Test Scenario 1.0 - Initialize Docker containers
   hosts: localhost
   roles:
-    - role: 'provision_docker'
+    - role: 'tomashavlas.provision_docker'
       provision_docker__inventory:
         - name: 'test_authorized_keys_01_centos7'
           image: 'tomashavlas/ansible-test:centos7'
@@ -147,7 +147,7 @@
       tags: [ 'acceptance-test' ]
 
   roles:
-    - role: 'authorized_keys'
+    - role: 'tomashavlas.authorized_keys'
       authorized_keys__list:
 # test minimal authorized key definition
         - key: '{{ test_public_keys[0] }}'
@@ -286,7 +286,7 @@
       failed_when: (test_result|failed or test_result|changed)
       tags: [ 'acceptance-test' ]
   roles:
-    - role: 'authorized_keys'
+    - role: 'tomashavlas.authorized_keys'
       authorized_keys__exclusive: true
       authorized_keys__manage_dir: false
       authorized_keys__list:

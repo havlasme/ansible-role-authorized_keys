@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+*Released: Unreleased*
+
+- Added user prefix to Ansible roles.
+  [tomashavlas]
+
 v1.2
 ----
 

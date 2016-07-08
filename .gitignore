@@ -3,4 +3,4 @@
 
 # dependency roles for tests
 tests/roles/*
-!tests/roles/authorized_keys
+!tests/roles/tomashavlas.authorized_keys

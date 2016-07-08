@@ -51,7 +51,7 @@ Example Playbook
 ```yaml
 - hosts: all
   roles:
-    - role: 'authorized_keys'
+    - role: 'tomashavlas.authorized_keys'
       authorized_keys__list:
         - key: '{{ lookup("file", "files/public_keys/root/id_rsa.pub" }}'
           user: 'root'
