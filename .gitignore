@@ -2,5 +2,5 @@
 *.retry
 
 # dependency roles for tests
-tests/roles/
+tests/roles/*
 !tests/roles/authorized_keys
