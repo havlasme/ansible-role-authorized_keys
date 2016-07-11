@@ -51,15 +51,15 @@ Example Playbook
 ```yaml
 - hosts: all
   roles:
-    - role: 'tomashavlas.authorized_keys'
+    - role: "tomashavlas.authorized_keys"
       authorized_keys__list:
-        - key: '{{ lookup("file", "files/public_keys/root/id_rsa.pub" }}'
-          user: 'root'
+        - key: "{{ lookup('file', 'files/public_keys/root/id_rsa.pub' }}"
+          user: "root"
           exclusive: true
         - key: |
-            {{ lookup("file", "files/public_keys/example/id_rsa.pub" }}
-            {{ lookup("file", "files/public_keys/example/id_ed25519.pub" }}
-          user: 'example'
+            {{ lookup('file', 'files/public_keys/example/id_rsa.pub' }}
+            {{ lookup('file', 'files/public_keys/example/id_ed25519.pub' }}
+          user: "example"
 ```
 
 For more examples see [test cases](https://github.com/tomashavlas/ansible-role-authorized_keys/tree/master/tests).
