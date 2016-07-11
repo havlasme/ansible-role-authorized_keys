@@ -15,6 +15,9 @@ Unreleased
 - Replaced default() jinja filter with it's shorter alias d().
   [tomashavlas]
 
+- Refactored tests.
+  [tomashavlas]
+
 v1.2
 ----
 

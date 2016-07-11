@@ -4,3 +4,4 @@
 # dependency roles for tests
 tests/roles/*
 !tests/roles/tomashavlas.authorized_keys
+tests/*/roles/*

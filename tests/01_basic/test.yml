@@ -69,7 +69,7 @@
     - name: Acceptance Test - Verify minimal authorized key definition (1 / 2)
       copy:
         dest: "~s1_user1/.ssh/authorized_keys"
-        src: "files/acceptance/01/s1_user1"
+        src: "files/acceptance/s1_user1"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
@@ -84,7 +84,7 @@
     - name: Acceptance Test - Verify complete authorized key definition (1 / 2)
       copy:
         dest: "~s1_user2/.ssh/authorized_keys"
-        src: "files/acceptance/01/s1_user2"
+        src: "files/acceptance/s1_user2"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
@@ -99,21 +99,21 @@
     - name: Acceptance Test - Verify multiple authorized keys
       copy:
         dest: "~s1_user3/.ssh/authorized_keys"
-        src: "files/acceptance/01/s1_user3"
+        src: "files/acceptance/s1_user3"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify multiple authorized keys in single entry
       copy:
         dest: "~s1_user4/.ssh/authorized_keys"
-        src: "files/acceptance/01/s1_user4"
+        src: "files/acceptance/s1_user4"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify not disabled authorized keys
       copy:
         dest: "~s1_user5/.ssh/authorized_keys"
-        src: "files/acceptance/01/s1_user5"
+        src: "files/acceptance/s1_user5"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
@@ -127,21 +127,21 @@
     - name: Acceptance Test - Verify disabled authorized keys (2 / 2)
       copy:
         dest: "~s1_user7/.ssh/authorized_keys"
-        src: "files/acceptance/01/s1_user7"
+        src: "files/acceptance/s1_user7"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify exclusive authorized keys
       copy:
         dest: "~s1_user8/.ssh/authorized_keys"
-        src: "files/acceptance/01/s1_user8"
+        src: "files/acceptance/s1_user8"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify different authorized_keys file location
       copy:
         dest: "{{ test_authorized_keys_file }}"
-        src: "files/acceptance/01/s1_authorized_keys"
+        src: "files/acceptance/s1_authorized_keys"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
@@ -236,7 +236,7 @@
     - name: Acceptance Test - Verify single authorized key definition (1 / 2)
       copy:
         dest: "~s2_user1/.ssh/authorized_keys"
-        src: "files/acceptance/01/s2_user1"
+        src: "files/acceptance/s2_user1"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
@@ -251,14 +251,14 @@
     - name: Acceptance Test - Verify multiple authorized keys in single entry
       copy:
         dest: "~s2_user2/.ssh/authorized_keys"
-        src: "files/acceptance/01/s2_user2"
+        src: "files/acceptance/s2_user2"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify managed directory (1 / 2)
       copy:
         dest: "~s2_user3/.ssh/authorized_keys"
-        src: "files/acceptance/01/s2_user3"
+        src: "files/acceptance/s2_user3"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
@@ -273,14 +273,14 @@
     - name: Acceptance Test - Verify replacing authorized keys
       copy:
         dest: "~s2_user4/.ssh/authorized_keys"
-        src: "files/acceptance/01/s2_user4"
+        src: "files/acceptance/s2_user4"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify non-exclusive authorized key
       copy:
         dest: "~s2_user5/.ssh/authorized_keys"
-        src: "files/acceptance/01/s2_user5"
+        src: "files/acceptance/s2_user5"
       register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
       tags: [ "acceptance-test" ]
