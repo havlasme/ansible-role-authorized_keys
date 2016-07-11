@@ -16,6 +16,5 @@ idempotency:
 acceptance:
 	ansible-playbook test.yml -i inventory --tags=initialize-docker,acceptance-test
 
-
 clean:
 	ansible-playbook test.yml -i inventory -e "provision_docker__container_state=absent" --tags=initialize-docker
