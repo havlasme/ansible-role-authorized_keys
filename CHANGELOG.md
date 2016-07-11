@@ -9,6 +9,9 @@ Unreleased
 - Added user prefix to Ansible roles.
   [tomashavlas]
 
+- Enclosed strings into double-quotes instead of single-quotes.
+  [tomashavlas]
+
 v1.2
 ----
 

@@ -2,310 +2,309 @@
 - name: Pre-Test Scenario 1.0 - Initialize Docker containers
   hosts: localhost
   roles:
-    - role: 'tomashavlas.provision_docker'
+    - role: "tomashavlas.provision_docker"
       provision_docker__inventory:
-        - name: 'test_authorized_keys_01_centos7'
-          image: 'tomashavlas/ansible-test:centos7'
+        - name: "test_authorized_keys_01_centos7"
+          image: "tomashavlas/ansible-test:centos7"
           volumes:
-            - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-        - name: 'test_authorized_keys_01_debian8'
-          image: 'tomashavlas/ansible-test:debian8'
+            - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+        - name: "test_authorized_keys_01_debian8"
+          image: "tomashavlas/ansible-test:debian8"
           volumes:
-            - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+            - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
   post_tasks:
     - name: Wait for SSH connection to Docker containers
       wait_for:
-        host: '{{ hostvars[item.name]["ansible_ssh_host"] }}'
+        host: "{{ hostvars[item.name]['ansible_ssh_host'] }}"
         port: 22
         timeout: 30
         connect_timeout: 30
-      with_items: '{{ provision_docker__inventory }}'
-  tags: [ 'initialize-docker' ]
+      with_items: "{{ provision_docker__inventory }}"
+  tags: [ "initialize-docker" ]
 
 - name: Test Scenario 1.1 - Basic role functionality
   hosts: provision_docker__containers
-  remote_user: 'root'
+  remote_user: "root"
   vars:
-    test_authorized_keys_file: '/etc/ssh/authorized_keys'
+    test_authorized_keys_file: "/etc/ssh/authorized_keys"
     test_public_keys:
-      - '{{ lookup("file", "files/public_keys/id_rsa.pub") }}'
-      - '{{ lookup("file", "files/public_keys/id_rsa_two.pub") }}'
-      - '{{ lookup("file", "files/public_keys/id_ecdsa.pub") }}'
-      - '{{ lookup("file", "files/public_keys/id_ed25519.pub") }}'
+      - "{{ lookup('file', 'files/public_keys/id_rsa.pub') }}"
+      - "{{ lookup('file', 'files/public_keys/id_rsa_two.pub') }}"
+      - "{{ lookup('file', 'files/public_keys/id_ecdsa.pub') }}"
+      - "{{ lookup('file', 'files/public_keys/id_ed25519.pub') }}"
     test_users:
-      - 's1_user1'
-      - 's1_user2'
-      - 's1_user3'
-      - 's1_user4'
-      - 's1_user5'
-      - 's1_user6'
-      - 's1_user7'
-      - 's1_user8'
+      - "s1_user1"
+      - "s1_user2"
+      - "s1_user3"
+      - "s1_user4"
+      - "s1_user5"
+      - "s1_user6"
+      - "s1_user7"
+      - "s1_user8"
   pre_tasks:
     - name: Pre-Test - Create test users
       user:
-        name: '{{ item }}'
+        name: "{{ item }}"
         createhome: true
-        state: 'present'
+        state: "present"
       with_items:
-        - '{{ test_users }}'
+        - "{{ test_users }}"
       changed_when: false
-      tags: [ 'pre-test' ]
+      tags: [ "pre-test" ]
     - name: Pre-Test - Create "remove me" authorized key
       authorized_key:
         key: |
           {{ test_public_keys[0] }}
           {{ test_public_keys[1] }}
-        user: 's1_user7'
+        user: "s1_user7"
       changed_when: false
-      tags: [ 'pre-test' ]
+      tags: [ "pre-test" ]
     - name: Pre-Test - Create "remove me" authorized key
       authorized_key:
-        key: '{{ test_public_keys[0] }}'
-        user: 's1_user8'
+        key: "{{ test_public_keys[0] }}"
+        user: "s1_user8"
       changed_when: false
-      tags: [ 'pre-test' ]
+      tags: [ "pre-test" ]
   post_tasks:
     - name: Acceptance Test - Verify minimal authorized key definition (1 / 2)
       copy:
-        dest: '~s1_user1/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s1_user1'
-      register: 'test_result'
+        dest: "~s1_user1/.ssh/authorized_keys"
+        src: "files/acceptance/01/s1_user1"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify minimal authorized key definition (2 / 2)
       file:
-        path: '~s1_user1/.ssh'
-        mode: '0700'
-        state: 'directory'
-      register: 'test_result'
+        path: "~s1_user1/.ssh"
+        mode: "0700"
+        state: "directory"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify complete authorized key definition (1 / 2)
       copy:
-        dest: '~s1_user2/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s1_user2'
-      register: 'test_result'
+        dest: "~s1_user2/.ssh/authorized_keys"
+        src: "files/acceptance/01/s1_user2"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify complete authorized key definition (2 / 2)
       file:
-        path: '~s1_user2/.ssh'
-        mode: '0755'
-        state: 'directory'
-      register: 'test_result'
+        path: "~s1_user2/.ssh"
+        mode: "0755"
+        state: "directory"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify multiple authorized keys
       copy:
-        dest: '~s1_user3/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s1_user3'
-      register: 'test_result'
+        dest: "~s1_user3/.ssh/authorized_keys"
+        src: "files/acceptance/01/s1_user3"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify multiple authorized keys in single entry
       copy:
-        dest: '~s1_user4/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s1_user4'
-      register: 'test_result'
+        dest: "~s1_user4/.ssh/authorized_keys"
+        src: "files/acceptance/01/s1_user4"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify not disabled authorized keys
       copy:
-        dest: '~s1_user5/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s1_user5'
-      register: 'test_result'
+        dest: "~s1_user5/.ssh/authorized_keys"
+        src: "files/acceptance/01/s1_user5"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify disabled authorized keys (1 / 2)
       file:
-        path: '~s1_user6/.ssh/authorized_keys'
-        state: 'absent'
-      register: 'test_result'
+        path: "~s1_user6/.ssh/authorized_keys"
+        state: "absent"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify disabled authorized keys (2 / 2)
       copy:
-        dest: '~s1_user7/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s1_user7'
-      register: 'test_result'
+        dest: "~s1_user7/.ssh/authorized_keys"
+        src: "files/acceptance/01/s1_user7"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify exclusive authorized keys
       copy:
-        dest: '~s1_user8/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s1_user8'
-      register: 'test_result'
+        dest: "~s1_user8/.ssh/authorized_keys"
+        src: "files/acceptance/01/s1_user8"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify different authorized_keys file location
       copy:
-        dest: '{{ test_authorized_keys_file }}'
-        src: 'files/acceptance/01/s1_authorized_keys'
-      register: 'test_result'
+        dest: "{{ test_authorized_keys_file }}"
+        src: "files/acceptance/01/s1_authorized_keys"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
-
+      tags: [ "acceptance-test" ]
   roles:
-    - role: 'tomashavlas.authorized_keys'
+    - role: "tomashavlas.authorized_keys"
       authorized_keys__list:
 # test minimal authorized key definition
-        - key: '{{ test_public_keys[0] }}'
-          user: 's1_user1'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s1_user1"
 # test complete authorized key definition
-        - key: '{{ test_public_keys[1] }}'
-          user: 's1_user2'
-          key_options: 'no-port-forwarding,from="10.0.1.1"'
+        - key: "{{ test_public_keys[1] }}"
+          user: "s1_user2"
+          key_options: "no-port-forwarding,from='10.0.1.1'"
           manage_dir: false
 # test multiple authorized keys
-        - key: '{{ test_public_keys[0] }}'
-          user: 's1_user3'
-        - key: '{{ test_public_keys[1] }}'
-          user: 's1_user3'
-        - key: '{{ test_public_keys[2] }}'
-          user: 's1_user3'
-        - key: '{{ test_public_keys[3] }}'
-          user: 's1_user3'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s1_user3"
+        - key: "{{ test_public_keys[1] }}"
+          user: "s1_user3"
+        - key: "{{ test_public_keys[2] }}"
+          user: "s1_user3"
+        - key: "{{ test_public_keys[3] }}"
+          user: "s1_user3"
 # test multiple authorized keys in single entry
         - key: |
             {{ test_public_keys[0] }}
             {{ test_public_keys[1] }}
             {{ test_public_keys[2] }}
             {{ test_public_keys[3] }}
-          user: 's1_user4'
+          user: "s1_user4"
 # test not disabled authorized key
-        - key: '{{ test_public_keys[0] }}'
-          user: 's1_user5'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s1_user5"
           disabled: false
 # test disabled authorized keys
-        - key: '{{ test_public_keys[0] }}'
-          user: 's1_user6'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s1_user6"
           disabled: true
-        - key: '{{ test_public_keys[0] }}'
-          user: 's1_user7'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s1_user7"
           disabled: true
 # test exclusive authorized keys
-        - key: '{{ test_public_keys[1] }}'
-          user: 's1_user8'
+        - key: "{{ test_public_keys[1] }}"
+          user: "s1_user8"
           exclusive: true
 # test different authorized_keys file location
-        - key: '{{ test_public_keys[0] }}'
-          user: 'root'
+        - key: "{{ test_public_keys[0] }}"
+          user: "root"
           manage_dir: false
-          path: '{{ test_authorized_keys_file }}'
+          path: "{{ test_authorized_keys_file }}"
 
 - name: Test Scenario 1.2 - Keys are exclusive by default and directories are not managed by default
   hosts: provision_docker__containers
-  remote_user: 'root'
+  remote_user: "root"
   vars:
     test_public_keys:
-      - '{{ lookup("file", "files/public_keys/id_rsa.pub") }}'
-      - '{{ lookup("file", "files/public_keys/id_rsa_two.pub") }}'
+      - "{{ lookup('file', 'files/public_keys/id_rsa.pub') }}"
+      - "{{ lookup('file', 'files/public_keys/id_rsa_two.pub') }}"
     test_users:
-      - 's2_user1'
-      - 's2_user2'
-      - 's2_user3'
-      - 's2_user4'
-      - 's2_user5'
+      - "s2_user1"
+      - "s2_user2"
+      - "s2_user3"
+      - "s2_user4"
+      - "s2_user5"
   pre_tasks:
     - name: Pre-Test - Create test users
       user:
-        name: '{{ item }}'
+        name: "{{ item }}"
         createhome: true
-        state: 'present'
+        state: "present"
       with_items:
-        - '{{ test_users }}'
+        - "{{ test_users }}"
       changed_when: false
-      tags: [ 'pre-test' ]
+      tags: [ "pre-test" ]
     - name: Pre-Test - Create "do not remove me" authorized key
       authorized_key:
-        key: '{{ test_public_keys[0] }}'
-        user: 's2_user5'
+        key: "{{ test_public_keys[0] }}"
+        user: "s2_user5"
         manage_dir: false
       changed_when: false
-      tags: [ 'pre-test' ]
+      tags: [ "pre-test" ]
     - name: Pre-Test - Create "remove me" authorized key
       authorized_key:
         key: |
           {{ test_public_keys[0] }}
           {{ test_public_keys[1] }}
-        user: 's2_user4'
+        user: "s2_user4"
         manage_dir: false
       changed_when: false
-      tags: [ 'pre-test' ]
+      tags: [ "pre-test" ]
   post_tasks:
     - name: Acceptance Test - Verify single authorized key definition (1 / 2)
       copy:
-        dest: '~s2_user1/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s2_user1'
-      register: 'test_result'
+        dest: "~s2_user1/.ssh/authorized_keys"
+        src: "files/acceptance/01/s2_user1"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify single authorized key definition (2 / 2)
       file:
-        path: '~s2_user1/.ssh'
-        mode: '0755'
-        state: 'directory'
-      register: 'test_result'
+        path: "~s2_user1/.ssh"
+        mode: "0755"
+        state: "directory"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify multiple authorized keys in single entry
       copy:
-        dest: '~s2_user2/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s2_user2'
-      register: 'test_result'
+        dest: "~s2_user2/.ssh/authorized_keys"
+        src: "files/acceptance/01/s2_user2"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify managed directory (1 / 2)
       copy:
-        dest: '~s2_user3/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s2_user3'
-      register: 'test_result'
+        dest: "~s2_user3/.ssh/authorized_keys"
+        src: "files/acceptance/01/s2_user3"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify managed directory (2 / 2)
       file:
-        path: '~s2_user3/.ssh'
-        mode: '0700'
-        state: 'directory'
-      register: 'test_result'
+        path: "~s2_user3/.ssh"
+        mode: "0700"
+        state: "directory"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify replacing authorized keys
       copy:
-        dest: '~s2_user4/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s2_user4'
-      register: 'test_result'
+        dest: "~s2_user4/.ssh/authorized_keys"
+        src: "files/acceptance/01/s2_user4"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
     - name: Acceptance Test - Verify non-exclusive authorized key
       copy:
-        dest: '~s2_user5/.ssh/authorized_keys'
-        src: 'files/acceptance/01/s2_user5'
-      register: 'test_result'
+        dest: "~s2_user5/.ssh/authorized_keys"
+        src: "files/acceptance/01/s2_user5"
+      register: "test_result"
       failed_when: (test_result|failed or test_result|changed)
-      tags: [ 'acceptance-test' ]
+      tags: [ "acceptance-test" ]
   roles:
-    - role: 'tomashavlas.authorized_keys'
+    - role: "tomashavlas.authorized_keys"
       authorized_keys__exclusive: true
       authorized_keys__manage_dir: false
       authorized_keys__list:
 # test single authorized key definition
-        - key: '{{ test_public_keys[0] }}'
-          user: 's2_user1'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s2_user1"
 # test multiple authorized keys in single entry
         - key: |
             {{ test_public_keys[0] }}
             {{ test_public_keys[1] }}
-          user: 's2_user2'
+          user: "s2_user2"
 # test managed directory
-        - key: '{{ test_public_keys[0] }}'
-          user: 's2_user3'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s2_user3"
           manage_dir: true
 # test replacing authorized keys
-        - key: '{{ test_public_keys[0] }}'
-          user: 's2_user4'
+        - key: "{{ test_public_keys[0] }}"
+          user: "s2_user4"
 # test non-exclusive authorized key
-        - key: '{{ test_public_keys[1] }}'
-          user: 's2_user5'
+        - key: "{{ test_public_keys[1] }}"
+          user: "s2_user5"
           exclusive: false

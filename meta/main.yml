@@ -1,13 +1,13 @@
 dependencies: []
 
 galaxy_info:
-  author: 'Tomáš Havlas'
-  description: 'Manage users authorized ssh keys.'
-  company: 'Raven Systems'
-  issue_tracker_url: 'https://github.com/tomashavlas/ansible-role-authorized_keys/issues'
-  license: 'BSD'
+  author: "Tomáš Havlas"
+  description: "Manage users authorized ssh keys."
+  company: "Raven Systems"
+  issue_tracker_url: "https://github.com/tomashavlas/ansible-role-authorized_keys/issues"
+  license: "BSD"
   min_ansible_version: 2.0
-  github_branch: 'master'
+  github_branch: "master"
   platforms:
   - name: Debian
     versions:
@@ -19,7 +19,7 @@ galaxy_info:
     versions:
       - 23
   galaxy_tags:
-    - 'authorized'
-    - 'key'
-    - 'keys'
-    - 'ssh'
+    - "authorized"
+    - "key"
+    - "keys"
+    - "ssh"
