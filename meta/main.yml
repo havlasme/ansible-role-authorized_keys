@@ -2,7 +2,7 @@ dependencies: []
 
 galaxy_info:
   author: "Tomáš Havlas"
-  description: "Manage users authorized ssh keys."
+  description: "Manage user's authorized keys."
   company: "Raven Systems"
   issue_tracker_url: "https://github.com/tomashavlas/ansible-role-authorized_keys/issues"
   license: "BSD"
