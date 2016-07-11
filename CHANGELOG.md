@@ -12,6 +12,9 @@ Unreleased
 - Enclosed strings into double-quotes instead of single-quotes.
   [tomashavlas]
 
+- Replaced default() jinja filter with it's shorter alias d().
+  [tomashavlas]
+
 v1.2
 ----
 
