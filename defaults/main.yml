@@ -1,4 +1,10 @@
 ---
+# default value for exclusive option of authrozied keys
+authorized_keys__default_exclusive: false
+
+# default value for manage_dir option of authorized keys
+authorized_keys__default_manage_dir: true
+
 # list of authorized keys specifications
 authorized_keys__list: []
 ## authorized key
@@ -15,9 +21,3 @@ authorized_keys__list: []
 #    path: string
 ## OPTIONAL: if set to true, authorized key is removed
 #    disabled: boolean
-
-# default value for exclusive option of authrozied keys
-authorized_keys__exclusive: false
-
-# default value for manage_dir option of authorized keys
-authorized_keys__manage_dir: true

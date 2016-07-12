@@ -34,10 +34,10 @@ authorized_keys__list: []
 #    disabled: boolean
 
 # default value for exclusive option of authrozied keys
-authorized_keys__exclusive: false
+authorized_keys__default_exclusive: false
 
 # default value for manage_dir option of authorized keys
-authorized_keys__manage_dir: true
+authorized_keys__default_manage_dir: true
 ```
 
 Dependencies

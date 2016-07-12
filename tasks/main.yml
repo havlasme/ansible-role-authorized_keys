@@ -3,9 +3,9 @@
   authorized_key:
     key: "{{ item.key }}"
     user: "{{ item.user }}"
-    exclusive: "{{ item.exclusive|d(authorized_keys__exclusive) }}"
+    exclusive: "{{ item.exclusive|d(authorized_keys__default_exclusive) }}"
     key_options: "{{ item.key_options|d(omit) }}"
-    manage_dir: "{{ item.manage_dir|d(authorized_keys__manage_dir) }}"
+    manage_dir: "{{ item.manage_dir|d(authorized_keys__default_manage_dir) }}"
     path: "{{ item.path|d(omit) }}"
     state: "{{ (item.disabled is undefined or not item.disabled|bool)|ternary('present', 'absent') }}"
   with_items:

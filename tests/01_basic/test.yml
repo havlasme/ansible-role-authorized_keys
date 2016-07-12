@@ -286,8 +286,8 @@
       tags: [ "acceptance-test" ]
   roles:
     - role: "tomashavlas.authorized_keys"
-      authorized_keys__exclusive: true
-      authorized_keys__manage_dir: false
+      authorized_keys__default_exclusive: true
+      authorized_keys__default_manage_dir: false
       authorized_keys__list:
 # test single authorized key definition
         - key: "{{ test_public_keys[0] }}"
