@@ -1,15 +1,4 @@
 ---
-- name: Configure - Manage SSH authorized_keys
-  authorized_key:
-    key: "{{ item.key }}"
-    user: "{{ item.user }}"
-    exclusive: "{{ item.exclusive|d(authorized_keys__default_exclusive) }}"
-    key_options: "{{ item.key_options|d(omit) }}"
-    manage_dir: "{{ item.manage_dir|d(authorized_keys__default_manage_dir) }}"
-    path: "{{ item.path|d(omit) }}"
-    state: "{{ (item.disabled is undefined or not item.disabled|bool)|ternary('present', 'absent') }}"
-  with_items:
-    - "{{ authorized_keys__list }}"
-  when: ((item.key is defined and item.key|trim) and
-         (item.user is defined and item.user|trim))
+- name: Configure authorized_keys
+  include: "configure/main.yml"
   tags: [ "configure" ]
