@@ -9,15 +9,15 @@ galaxy_info:
   github_branch: "master"
   issue_tracker_url: "https://github.com/tomashavlas/ansible-role-authorized_keys/issues"
   platforms:
-  - name: Debian
-    versions:
-      - jessie
-  - name: EL
-    versions:
-      - 7
-  - name: Fedora
-    versions:
-      - 23
+    - name: Debian
+      versions:
+        - jessie
+    - name: EL
+      versions:
+        - 7
+    - name: Fedora
+      versions:
+        - 23
   galaxy_tags:
     - "authorized"
     - "key"
