@@ -9,7 +9,7 @@ services:
 addons:
   apt:
     packages:
-    - expect
+    - expect-dev
     - python-pip
     - sshpass
 
