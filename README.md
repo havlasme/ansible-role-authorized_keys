@@ -53,12 +53,12 @@ Example Playbook
   roles:
     - role: "tomashavlas.authorized_keys"
       authorized_keys__list:
-        - key: "{{ lookup('file', 'files/public_keys/root/id_rsa.pub' }}"
+        - key: "{{ lookup('file', 'files/public_keys/root/id_rsa.pub') }}"
           user: "root"
           exclusive: true
         - key: |
-            {{ lookup('file', 'files/public_keys/example/id_rsa.pub' }}
-            {{ lookup('file', 'files/public_keys/example/id_ed25519.pub' }}
+            {{ lookup('file', 'files/public_keys/example/id_rsa.pub') }}
+            {{ lookup('file', 'files/public_keys/example/id_ed25519.pub') }}
           user: "example"
 ```
 
